@@ -7,21 +7,8 @@ from skimage.morphology import remove_small_objects,closing,disk,opening
 
 data_dir = 'data/'
 fit_dir = 'fit/'
-# no primary beam corrected file, then primary beam response, and primary beam corrected one
-file_in = data_dir + 'oNH2D_no_PBcorr.fits'
-file_in_PB = data_dir + 'oNH2D_PB.fits'
+# primary beam corrected file and in Kelvin units
 file_in_K = data_dir + 'oNH2D.fits'
-
-convert_to_K = False
-if convert_to_K:
-    from spectral_cube import SpectralCube
-    cube = SpectralCube.read(file_in)
-    PB = fits.getdata(file_in_PB)
-    kcube = cube.to(u.K) / np.squeeze(PB)
-    kcube.write(file_in_K, overwrite=True)
-    cube = 0
-    kcube = 0
-    PB = 0
 
 snr_min = 5
 file_thick = fit_dir + 'oNH2D_fit_thick_par_snr{0}.fits'.format(snr_min)
@@ -55,20 +42,17 @@ vmin_plot = 4.0; vmax_plot = 4.4
 # velocity range used to calculate rms
 vrms_0 = 0.; vrms_1 = 1.5
 
-F = False
-T = True
 multicore = 40
-
-plot_dv = F
+plot_dv = False
 
 # Prepare extra files
 Prepare_Files = False
 # Optically thin
-Optically_Thin = True
-Show_Optically_Thin = True 
+Optically_Thin = False
+Show_Optically_Thin = False
 # Optically thick
-Optically_Thick = True 
-Show_Optically_Thick = True 
+Optically_Thick = False
+Show_Optically_Thick = False
 
 if Prepare_Files:
     rms_map = cube.slice(vrms_0, vrms_1, unit='km/s').cube.std(axis=0)
@@ -98,17 +82,18 @@ else:
 import matplotlib.pyplot as plt
 plt.ion()
 
+
 if Optically_Thin:
     cube.Registry.add_fitter('nh2d_vtau', pyspeckit.spectrum.models.nh2d.nh2d_vtau_fitter, 4)
 
     print('start optically thin fit')
     cube.fiteach(fittype='nh2d_vtau',  guesses=[15.0, 0.1, vmean, 0.12],
                  verbose_level=1, signal_cut=snr_min,
-                 limitedmin=[T, T, T, T],
-                 limitedmax=[T, F, T, T],
+                 limitedmin=[True, True, True, True],
+                 limitedmax=[True, False, True, True],
                  minpars=[2.8, 0, vmin, 0.05],
                  maxpars=[250.0, 0, vmax, 1.0],
-                 fixed=[F, T, F, F], 
+                 fixed=[False, True, False, False], 
                  use_neighbor_as_guess=True, 
                  start_from_point=(xmax, ymax),
                  errmap=rms_map, 
@@ -123,18 +108,16 @@ if Optically_Thick:
     print('start optically thick fit')
     cube.fiteach(fittype='nh2d_vtau',  guesses=[7.0, 2.0, vmean, 0.12],
                  verbose_level=2, signal_cut=snr_min,
-                 limitedmin=[T, T, T, T],
-                 limitedmax=[T, T, T, T],
+                 limitedmin=[True, True, True, True],
+                 limitedmax=[True, True, True, True],
                  minpars=[2.8, 0, vmin, 0.05],
                  maxpars=[20., 50, vmax, 1.0],
-                 fixed=[F,F,F,F], 
+                 fixed=[False, False, False, False], 
                  use_neighbor_as_guess=True, 
                  start_from_point=(xmax, ymax),
                  errmap=rms_map, 
                  maskmap=planemask,
                  multicore=multicore)
-                 #position_order = (1./peaksnr)/planemask,
-
     cube.write_fit(file_thick, overwrite=True)
 
 
@@ -163,10 +146,10 @@ if Show_Optically_Thick:
     cube.mapplot()
     cube.plot_spectrum(xmax, ymax, plot_fit=True)
     if plot_dv:
-        cube.mapplot.plane = cube.parcube[3,:,:]
+        cube.mapplot.plane = cube.parcube[3, :, :]
         cube.mapplot(estimator=None, vmin=0.05, vmax=0.15)
     else:
-        cube.mapplot.plane = cube.parcube[2,:,:]
+        cube.mapplot.plane = cube.parcube[2, :, :]
         cube.mapplot(estimator=None, vmin=vmin_plot, vmax=vmax_plot,
             cmap='RdYlBu_r')
     plt.draw()
