@@ -17,6 +17,7 @@ Getting started
 
    preparation.rst
    cal_oNH2D.rst
+   cal_pNH2D.rst
    cal_NH3.rst
    parameter_flag.rst
 

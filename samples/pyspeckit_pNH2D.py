@@ -8,18 +8,18 @@ from skimage.morphology import remove_small_objects,closing,disk,opening
 data_dir = 'data/'
 fit_dir = 'fit/'
 # primary beam corrected file and in Kelvin units
-file_in_K = data_dir + 'oNH2D.fits'
+file_in_K = data_dir + 'pNH2D.fits'
 
 snr_min = 5
-file_thick = fit_dir + 'oNH2D_fit_thick_par_snr{0}.fits'.format(snr_min)
-file_thin = fit_dir + 'oNH2D_fit_thin_par_snr{0}.fits'.format(snr_min)
-rms_file = data_dir + 'oNH2D_rms.fits'
-SNR_file = data_dir + 'oNH2D_SNR.fits'
-Tpeak_file = data_dir + 'oNH2D_Tpeak.fits'
-mask_file = data_dir + 'oNH2D_mask.fits'
+file_thick = fit_dir + 'pNH2D_fit_thick_par_snr{0}.fits'.format(snr_min)
+file_thin = fit_dir + 'pNH2D_fit_thin_par_snr{0}.fits'.format(snr_min)
+rms_file = data_dir + 'pNH2D_rms.fits'
+SNR_file = data_dir + 'pNH2D_SNR.fits'
+Tpeak_file = data_dir + 'pNH2D_Tpeak.fits'
+mask_file = data_dir + 'pNH2D_mask.fits'
 
 # rest-freq used in Harju et al. (2020) for ortho-NH2D
-freq_line = 85.92627*u.GHz
+freq_line = 110.153599*u.GHz
 
 
 cube = pyspeckit.Cube(file_in_K)
@@ -136,7 +136,7 @@ if Show_Optically_Thin:
             cmap='RdYlBu_r')
     plt.draw()
     plt.show()
-    plt.savefig('oNH2D_pyspeckit_poor_thin_fit.png')
+    plt.savefig('pNH2D_pyspeckit_poor_thin_fit.png')
 
 
 if Show_Optically_Thick:
@@ -154,4 +154,4 @@ if Show_Optically_Thick:
             cmap='RdYlBu_r')
     plt.draw()
     plt.show()
-    plt.savefig('oNH2D_pyspeckit_poor_thick_fit.png')
+    plt.savefig('pNH2D_pyspeckit_poor_thick_fit.png')
