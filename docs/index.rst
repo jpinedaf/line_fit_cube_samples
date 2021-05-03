@@ -16,6 +16,7 @@ Getting started
    :caption: Contents:
 
    preparation.rst
+   cal_Gauss.rst
    cal_oNH2D.rst
    cal_pNH2D.rst
    cal_NH3.rst
