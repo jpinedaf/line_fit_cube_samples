@@ -1,5 +1,5 @@
 ##########
-ortho-NH2D
+ortho-NH<sub>2</sub>D
 ##########
 
 This script runs the optically thin and thick approximations for the fit. 

@@ -1,5 +1,5 @@
 ##########
-para-NH2D
+para-NH<sub>2</sub>D
 ##########
 
 This script runs the optically thin and thick approximations for the fit. 
