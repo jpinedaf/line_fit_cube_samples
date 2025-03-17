@@ -23,7 +23,7 @@ The regridding of cubes to a matched grid can be done by leveraging the
 options already available in the `spectral-cube <https://spectral-cube.readthedocs.io/en/latest/>`_
 package. The following code shows how to regrid a cube to a common grid.
 
-.. literalinclude:: ../samples/regrid_cube.py
+.. literalinclude:: ../samples/regrid_cubes.py
    :linenos:
 
 Unit conversion and primary beam correction
