@@ -1,5 +1,5 @@
 ##########
-para-NH<sub>2</sub>D
+para-NH\ :sub:`2`\ D
 ##########
 
 This script runs the optically thin and thick approximations for the fit. 
